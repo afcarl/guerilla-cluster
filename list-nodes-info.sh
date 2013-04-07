@@ -10,13 +10,17 @@ trap "rm -f '$tmp'" exit
 
 source run-distributed.sh node-info.sh | tee $tmp
 
-NUM_CPUS=$(cat $tmp | cut -f 4 -d" " | paste -sd+ - | bc)
-NUM_NODES=$(cat $tmp | wc -l)
 LINE_LEN=$(cat $tmp | wc -L)
+NUM_NODES=$(cat $tmp | wc -l)
+NUM_CPUS=$(cat $tmp | cut -f 3 -d" " | paste -sd+ - | bc)
+FREE_MEM=$(cat $tmp | cut -f 4 -d" " | paste -sd+ - | bc)
+TOTAL_MEM=$(cat $tmp | cut -f 5 -d" " | paste -sd+ - | bc)
 
 print_line $LINE_LEN
-echo -e "Hostname    Distrib    Arch    Ncpus    Processor"
+echo "Hostname Arch Ncpus Free Mem Distrib Processor"
 print_line $LINE_LEN
 
-echo "Number of nodes: $NUM_NODES"
+echo "Free memory:     $FREE_MEM Mb"
+echo "Total memory:    $TOTAL_MEM Mb"
 echo "Number of cpus:  $NUM_CPUS"
+echo "Number of nodes: $NUM_NODES"
